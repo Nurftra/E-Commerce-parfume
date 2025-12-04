@@ -1,10 +1,10 @@
 import os
 from waitress import serve
-from app import app  # Impor aplikasi Flask Anda dari app.py
 from app import db  # Impor aplikasi Flask Anda dari app.py
 from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 import secrets
+from app import create_app
 from functools import wraps
 from dotenv import load_dotenv
 load_dotenv() # Memuat variabel dari file .env
