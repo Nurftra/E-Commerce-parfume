@@ -33,6 +33,7 @@ python-http-client==3.3.7
 rich==14.2.0
 sendgrid==6.12.5
 SQLAlchemy==2.0.44
+tomli==2.3.0
 typing_extensions==4.15.0
 waitress==3.0.2
 Werkzeug==3.1.3

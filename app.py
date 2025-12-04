@@ -1,6 +1,7 @@
 import os
 from datetime import datetime, timedelta, timezone
 from decimal import Decimal
+from flask_migrate import Migrate
 import secrets
 from functools import wraps
 from dotenv import load_dotenv
@@ -39,6 +40,7 @@ if not FLASK_DEBUG:
     app.config['SESSION_COOKIE_SAMESITE'] = 'Lax' # Melindungi dari CSRF
 
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 csrf = CSRFProtect(app)
 limiter = Limiter(
     get_remote_address,
@@ -709,6 +711,8 @@ def init_db_command():
         db.drop_all()
         db.create_all()
         click.echo(click.style('Database telah diinisialisasi ulang.', fg='green'))
+
+
 
 if __name__ == '__main__':
     # Blok ini hanya untuk development lokal.
