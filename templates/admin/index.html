@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Dashboard Admin{% endblock %}
+
+{% block content %}
+<h2 class="text-3xl font-bold text-gray-800 mb-6">Dashboard Admin</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Card Produk -->
+    <div class="bg-blue-500 text-white rounded-lg shadow-md p-6">
+        <div class="flex justify-between items-start">
+            <h3 class="text-xl font-bold">Produk</h3>
+            <span class="text-4xl font-bold">{{ product_count }}</span>
+        </div>
+        <p class="mt-2 text-blue-100">Kelola semua produk di toko.</p>
+        <a href="{{ url_for('admin_products') }}" class="mt-4 inline-block bg-white text-blue-600 px-4 py-2 rounded-md text-sm font-semibold hover:bg-blue-100">Kelola Produk &rarr;</a>
+    </div>
+
+    <!-- Card Pengguna -->
+    <div class="bg-green-500 text-white rounded-lg shadow-md p-6">
+        <div class="flex justify-between items-start">
+            <h3 class="text-xl font-bold">Pengguna</h3>
+            <span class="text-4xl font-bold">{{ user_count }}</span>
+        </div>
+        <p class="mt-2 text-green-100">Lihat dan kelola semua pengguna.</p>
+        <a href="{{ url_for('admin_users') }}" class="mt-4 inline-block bg-white text-green-600 px-4 py-2 rounded-md text-sm font-semibold hover:bg-green-100">Kelola Pengguna &rarr;</a>
+    </div>
+
+    <!-- Card Pesanan -->
+    <div class="bg-sky-500 text-white rounded-lg shadow-md p-6">
+        <div class="flex justify-between items-start">
+            <h3 class="text-xl font-bold">Pesanan</h3>
+            <span class="text-4xl font-bold">{{ order_count }}</span>
+        </div>
+        <p class="mt-2 text-sky-100">Lihat semua riwayat pesanan.</p>
+        <a href="{{ url_for('admin_orders') }}" class="mt-4 inline-block bg-white text-sky-600 px-4 py-2 rounded-md text-sm font-semibold hover:bg-sky-100">Kelola Pesanan &rarr;</a>
+    </div>
+</div>
+{% endblock %}

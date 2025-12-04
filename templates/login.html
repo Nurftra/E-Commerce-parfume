@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Login - Parfume Shop{% endblock %}
+{% block content %}
+<div class="flex justify-center">
+  <div class="w-full max-w-md">
+    <div class="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4">
+      <h2 class="text-2xl font-bold text-center mb-6">Login</h2>
+      <form method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <div class="mb-4">
+          {{ form.identifier.label(class="block text-gray-700 text-sm font-bold mb-2") }}
+          {{ form.identifier(class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-pink-500", placeholder="Username atau Email") }}
+        </div>
+        <div class="mb-6">
+          {{ form.password.label(class="block text-gray-700 text-sm font-bold mb-2") }}
+          <div class="relative">
+            {{ form.password(class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-pink-500", id="password") }}
+            <button class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500" type="button" id="togglePassword">
+              <i class="bi bi-eye-slash" id="eye-icon-slash"></i>
+              <i class="bi bi-eye hidden" id="eye-icon-open"></i>
+            </button>
+          </div>
+        </div>
+        <div class="flex items-center justify-between">
+          <button type="submit" class="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            Login
+          </button>
+        </div>
+      </form>
+      <p class="mt-6 text-center text-sm text-gray-600">
+        Belum punya akun? <a href="{{ url_for('register') }}" class="font-bold text-pink-600 hover:text-pink-800">Register di sini</a>
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      const togglePassword = document.querySelector('#togglePassword');
+      const password = document.querySelector('#password');
+      const eyeIconSlash = document.querySelector('#eye-icon-slash');
+      const eyeIconOpen = document.querySelector('#eye-icon-open');
+      togglePassword.addEventListener('click', function () {
+          const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+          password.setAttribute('type', type);
+          eyeIconSlash.classList.toggle('hidden');
+          eyeIconOpen.classList.toggle('hidden');
+      });
+  });
+</script>
+{% endblock %}

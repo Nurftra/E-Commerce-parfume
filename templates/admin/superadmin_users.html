@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Kelola Pengguna{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-3xl font-bold text-gray-800">Kelola Pengguna</h2>
+        <a href="{{ url_for('superadmin_add_user') }}" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-300">
+            + Tambah User
+        </a>
+    </div>
+
+    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+        <table class="min-w-full leading-normal">
+            <thead>
+                <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                    <th class="py-3 px-6 text-left">Username</th>
+                    <th class="py-3 px-6 text-left">Email</th>
+                    <th class="py-3 px-6 text-center">Role</th>
+                    <th class="py-3 px-6 text-center">Aksi</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-700 text-sm font-light">
+                {% for user in users %}
+                <tr class="border-b border-gray-200 hover:bg-gray-100">
+                    <td class="py-3 px-6 text-left whitespace-nowrap">{{ user.username }}</td>
+                    <td class="py-3 px-6 text-left">{{ user.email }}</td>
+                    <td class="py-3 px-6 text-center">
+                        <span class="font-semibold capitalize">{{ user.role }}</span>
+                    </td>
+                    <td class="py-3 px-6 text-center">
+                        {% if user.role == 'superadmin' %}
+                            <span class="text-gray-500 italic">Tidak ada aksi</span>
+                        {% elif user.id != current_user.id %}
+                            <form action="{{ url_for('superadmin_set_role', user_id=user.id, new_role='admin' if user.role == 'user' else 'user') }}" method="POST" class="inline-block">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                
+                                {% if user.role == 'user' %}
+                                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white text-xs font-bold py-1 px-3 rounded" onclick="return confirm('Apakah Anda yakin ingin menjadikan {{ user.username }} sebagai Admin?')">
+                                        Jadikan Admin
+                                    </button>
+                                {% elif user.role == 'admin' %}
+                                    <button type="submit" class="bg-yellow-500 hover:bg-yellow-700 text-white text-xs font-bold py-1 px-3 rounded" onclick="return confirm('Apakah Anda yakin ingin menurunkan role {{ user.username }} menjadi User biasa?')">
+                                        Turunkan ke User
+                                    </button>
+                                {% endif %}
+                            </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

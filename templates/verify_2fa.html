@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Verifikasi Login{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
+        <h2 class="text-2xl font-bold text-center text-gray-900">Verifikasi Dua Langkah</h2>
+        <p class="text-center text-gray-600">
+            Kami telah mengirimkan kode 6 digit ke email Anda. Silakan masukkan kode di bawah ini.
+        </p>
+
+        <form method="POST" action="{{ url_for('verify_2fa') }}" class="space-y-6">
+            {{ form.hidden_tag() }}
+            <div>
+                <label for="otp" class="text-sm font-medium text-gray-700">Kode Verifikasi</label>
+                <div class="mt-1">
+                    {{ form.otp(class="w-full px-3 py-2 text-lg text-center tracking-widest border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500", placeholder="------", autocomplete="one-time-code", required=True) }}
+                </div>
+                {% for error in form.otp.errors %}
+                    <span class="text-sm text-red-500">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <div>
+                <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Verifikasi
+                </button>
+            </div>
+        </form>
+        <div class="text-center text-sm">
+            <p class="text-gray-600">
+                Tidak menerima kode? 
+                <button id="resend-btn" class="font-medium text-indigo-600 hover:text-indigo-500 disabled:text-gray-400 disabled:cursor-not-allowed" disabled>
+                    Kirim ulang
+                </button>
+                <span id="countdown" class="text-gray-500"></span>
+            </p>
+            <p id="resend-feedback" class="text-green-600 mt-2"></p>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const resendBtn = document.getElementById('resend-btn');
+    const countdownEl = document.getElementById('countdown');
+    const feedbackEl = document.getElementById('resend-feedback');
+    let cooldown = 60; // Cooldown dalam detik
+
+    function startCooldown() {
+        resendBtn.disabled = true;
+        feedbackEl.textContent = '';
+        let timer = cooldown;
+
+        const interval = setInterval(() => {
+            countdownEl.textContent = `(${timer}s)`;
+            timer--;
+
+            if (timer < 0) {
+                clearInterval(interval);
+                countdownEl.textContent = '';
+                resendBtn.disabled = false;
+            }
+        }, 1000);
+    }
+
+    resendBtn.addEventListener('click', function() {
+        // Kirim request ke backend untuk mengirim ulang kode
+        fetch("{{ url_for('resend_2fa') }}", {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token() }}' // Penting untuk keamanan
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                feedbackEl.textContent = 'Kode baru berhasil dikirim!';
+                startCooldown();
+            } else {
+                feedbackEl.textContent = 'Gagal mengirim ulang kode. Coba lagi nanti.';
+                feedbackEl.classList.remove('text-green-600');
+                feedbackEl.classList.add('text-red-600');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            feedbackEl.textContent = 'Terjadi kesalahan jaringan.';
+        });
+    });
+
+    // Mulai cooldown saat halaman pertama kali dimuat
+    startCooldown();
+});
+</script>
+{% endblock %}

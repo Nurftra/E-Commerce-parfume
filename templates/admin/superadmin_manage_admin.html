@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Manajemen Admin</h2>
+
+    <a href="{{ url_for('superadmin_add_admin') }}" class="btn btn-success mb-3">+ Tambah Admin</a>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>No</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for admin in admins %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ admin.username }}</td>
+                <td>{{ admin.email }}</td>
+                <td>{{ admin.role }}</td>
+                <td>
+                    {% if admin.is_active %}
+                        <span class="badge bg-success">Aktif</span>
+                    {% else %}
+                        <span class="badge bg-danger">Nonaktif</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ url_for('superadmin_edit_admin', admin_id=admin.id) }}" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="{{ url_for('superadmin_delete_admin', admin_id=admin.id) }}" class="btn btn-danger btn-sm" onclick="return confirm('Hapus admin ini?');">Hapus</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

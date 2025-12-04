@@ -1,0 +1,58 @@
+
+{% extends 'base.html' %}
+{% block title %}Admin - Edit Produk{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md mt-10">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">Edit Produk: <span class="text-pink-600">{{ product.name }}</span></h2>
+    <form method="POST" novalidate>
+        {{ form.hidden_tag() }}
+
+        <div class="mb-4">
+            <label for="name" class="block text-gray-700 text-sm font-bold mb-2">{{ form.name.label }}</label>
+            {{ form.name(class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline", id="name") }}
+            {% if form.name.errors %}<ul class="text-red-500 text-xs italic mt-2">{% for error in form.name.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+        </div>
+
+        <div class="mb-4">
+            <label for="description" class="block text-gray-700 text-sm font-bold mb-2">{{ form.description.label }}</label>
+            {{ form.description(class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline", id="description", rows=4) }}
+            {% if form.description.errors %}<ul class="text-red-500 text-xs italic mt-2">{% for error in form.description.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+            <div>
+                <label for="price" class="block text-gray-700 text-sm font-bold mb-2">{{ form.price.label }}</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">Rp</span>
+                    {{ form.price(class="pl-8 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline", id="price") }}
+                </div>
+                {% if form.price.errors %}<ul class="text-red-500 text-xs italic mt-2">{% for error in form.price.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+            </div>
+            <div>
+                <label for="stock" class="block text-gray-700 text-sm font-bold mb-2">{{ form.stock.label }}</label>
+                {{ form.stock(class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline", id="stock") }}
+                {% if form.stock.errors %}<ul class="text-red-500 text-xs italic mt-2">{% for error in form.stock.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <label for="image_url" class="block text-gray-700 text-sm font-bold mb-2">{{ form.image_url.label }}</label>
+            {% if product.image_url %}
+                <img src="{{ product.image_url }}" alt="Preview" class="rounded-md border border-gray-300 mb-2 max-h-24">
+            {% endif %}
+            {{ form.image_url(class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline", id="image_url") }}
+            {% if form.image_url.errors %}<ul class="text-red-500 text-xs italic mt-2">{% for error in form.image_url.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+        </div>
+
+        <div class="flex items-center justify-end space-x-4">
+            <a href="{{ url_for('admin_products') }}" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                Batal
+            </a>
+            <button type="submit" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                Simpan Perubahan
+            </button>
+        </div>
+    </form>
+    </div>
+</div>
+{% endblock %}

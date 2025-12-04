@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Parfume Shop{% endblock %}</title>
+    <!-- Menggunakan Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Anda masih bisa menggunakan Bootstrap Icons jika mau -->
+    <style>
+      body {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      .main-content {
+        flex: 1;
+      }
+      .navbar-brand {
+        font-weight: bold;
+      }
+      .navbar-brand span {
+        color: #db2777; /* pink-600 */
+      }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+<!-- Navbar dengan Tailwind CSS -->
+<nav class="bg-white shadow-sm">
+  <div class="container mx-auto px-4">
+    <div class="flex justify-between items-center py-4">
+    <a class="navbar-brand" href="{{ url_for('index') }}">Parfume<span>Shop</span></a>
+      
+      <!-- Search Form -->
+      <form class="hidden md:flex w-full max-w-sm mx-4" action="{{ url_for('products_list') }}" method="GET">
+        <input class="w-full border border-gray-300 rounded-l-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500" type="search" name="search" placeholder="Cari parfum..." value="{{ search or '' }}" aria-label="Search">
+        <button class="bg-pink-500 text-white px-4 rounded-r-md hover:bg-pink-600" type="submit">Cari</button>
+      </form>
+
+      <!-- Links -->
+      <div class="hidden md:flex items-center space-x-4">
+        <a class="text-gray-600 hover:text-pink-600" href="{{ url_for('products_list') }}">Produk</a>
+        {% if current_user %}
+          <a class="text-gray-600 hover:text-pink-600" href="{{ url_for('view_cart') }}">Keranjang</a>
+          {% if current_user.is_admin %}
+          <a class="text-gray-600 hover:text-pink-600" href="{{ url_for('admin_index') }}">Admin</a>
+          {% endif %}
+          <a class="text-gray-600 hover:text-pink-600" href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
+          <a class="text-gray-600 hover:text-pink-600" href="{{ url_for('login') }}">Login</a>
+          <a class="bg-pink-500 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-pink-600" href="{{ url_for('register') }}">Daftar</a>
+        {% endif %}
+      </div>
+      <!-- Mobile menu button (implementasi lebih lanjut diperlukan) -->
+      <div class="md:hidden">
+        <button class="text-gray-600 hover:text-gray-800 focus:outline-none">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main class="container mx-auto mt-8 px-4 main-content">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="p-4 mb-4 text-sm rounded-lg {% if category == 'success' %}bg-green-100 text-green-800{% elif category == 'danger' %}bg-red-100 text-red-800{% else %}bg-blue-100 text-blue-800{% endif %}" role="alert">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="text-center text-gray-500 py-6 mt-8 bg-white">
+  © {{ now().year }} Parfume Shop — built with ❤️
+</footer>
+
+{% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,30 @@
+{% macro render_pagination(pagination, endpoint, search=None) %}
+  {% if pagination.pages > 1 %}
+  <nav aria-label="Page navigation" class="flex justify-center">
+    <ul class="flex items-center space-x-1">
+      {# Tombol Previous #}
+      <li>
+        <a href="{{ url_for(endpoint, page=pagination.prev_num, search=search or none) if pagination.has_prev else '#' }}"
+           class="px-4 py-2 rounded-md {{ 'text-gray-500 bg-white border' if pagination.has_prev else 'text-gray-400 bg-gray-100 cursor-not-allowed border' }}">
+          &laquo;
+        </a>
+      </li>
+      {# Nomor Halaman #}
+      {% for page_num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page_num %}
+          <li><a href="{{ url_for(endpoint, page=page_num, search=search or none) }}" class="px-4 py-2 rounded-md border {{ 'bg-pink-500 text-white border-pink-500' if page_num == pagination.page else 'bg-white text-gray-700 hover:bg-gray-50' }}">{{ page_num }}</a></li>
+        {% else %}
+          <li><span class="px-4 py-2 text-gray-500">...</span></li>
+        {% endif %}
+      {% endfor %}
+      {# Tombol Next #}
+      <li>
+        <a href="{{ url_for(endpoint, page=pagination.next_num, search=search or none) if pagination.has_next else '#' }}"
+           class="px-4 py-2 rounded-md {{ 'text-gray-500 bg-white border' if pagination.has_next else 'text-gray-400 bg-gray-100 cursor-not-allowed border' }}">
+          &raquo;
+        </a>
+      </li>
+    </ul>
+  </nav>
+  {% endif %}
+{% endmacro %}

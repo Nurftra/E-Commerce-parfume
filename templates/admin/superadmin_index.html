@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mx-auto mt-6">
+
+    <h2 class="text-2xl font-bold mb-6">Super Admin Dashboard</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <!-- Manajemen Admin -->
+        <div class="bg-white shadow-md rounded-lg p-6 text-center">
+            <h4 class="text-xl font-semibold mb-2">Manajemen Admin</h4>
+            <p class="text-gray-600 mb-4">Kelola semua akun admin di sistem.</p>
+
+            <a href="{{ url_for('superadmin_manage_users') }}"
+               class="inline-block bg-pink-500 text-white px-4 py-2 rounded-md hover:bg-pink-600 transition">
+               Kelola Admin
+            </a>
+        </div>
+
+        <!-- Manajemen User -->
+        <div class="bg-white shadow-md rounded-lg p-6 text-center">
+            <h4 class="text-xl font-semibold mb-2">Manajemen User</h4>
+            <p class="text-gray-600 mb-4">Lihat dan kelola seluruh data user.</p>
+
+            <a href="{{ url_for('admin_users') }}"
+               class="inline-block bg-gray-700 text-white px-4 py-2 rounded-md hover:bg-gray-800 transition">
+               Kelola User
+            </a>
+        </div>
+
+        <!-- Settings -->
+        <div class="bg-white shadow-md rounded-lg p-6 text-center">
+            <h4 class="text-xl font-semibold mb-2">System Settings</h4>
+            <p class="text-gray-600 mb-4">Konfigurasi sistem & pengaturan global.</p>
+
+            <a href="#"
+               class="inline-block bg-yellow-500 text-white px-4 py-2 rounded-md opacity-50 cursor-not-allowed">
+               (Coming Soon)
+            </a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

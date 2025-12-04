@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% from '_pagination.html' import render_pagination %}
+
+{% block title %}Admin - Products{% endblock %}
+
+{% block content %}
+<div class="flex justify-between items-center mb-6">
+    <h2 class="text-3xl font-bold text-gray-800">Kelola Produk</h2>
+    <a href="{{ url_for('admin_new_product') }}" class="bg-pink-500 text-white px-4 py-2 rounded-md hover:bg-pink-600 font-semibold">
+        + Produk Baru
+    </a>
+</div>
+
+<div class="bg-white shadow-md rounded-lg overflow-x-auto">
+    <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+            <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama Produk</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Harga</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Stok</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Aksi</th>
+            </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+            {% for p in products_pagination.items %}
+            <tr>
+                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">{{ p.name }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-gray-500">{{ p.price|rupiah }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-gray-500">{{ p.stock }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-4">
+                    <a href="{{ url_for('admin_edit_product', product_id=p.id) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                    <form action="{{ url_for('admin_delete_product', product_id=p.id) }}" method="post" onsubmit="return confirm('Anda yakin ingin menghapus produk ini?')" class="inline">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="text-red-600 hover:text-red-900">Hapus</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="mt-6">
+    {{ render_pagination(products_pagination, 'admin_products') }}
+</div>
+{% endblock %}
+

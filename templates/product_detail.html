@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}{{ product.name }} - Parfume Shop{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded shadow p-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+    
+    <!-- GAMBAR PRODUK -->
+    <div class="flex justify-center">
+      <img src="{{ product.image_url or 'https://source.unsplash.com/400x400/?perfume' }}" 
+           alt="{{ product.name }}" 
+           class="w-64 h-64 object-cover rounded-lg">
+    </div>
+
+    <!-- DETAIL PRODUK -->
+    <div class="flex flex-col justify-between">
+      <div>
+        <h1 class="text-3xl font-bold">{{ product.name }}</h1>
+        <div class="text-2xl font-bold text-pink-600 my-3">{{ product.price|rupiah }}</div>
+        <p class="text-gray-700 mb-4">{{ product.description }}</p>
+        <p class="text-sm text-gray-500 mb-4">Stok tersedia: {{ product.stock }}</p>
+      </div>
+
+      <!-- FORM TAMBAH KE KERANJANG -->
+      {% if current_user %}
+      <form action="{{ url_for('add_to_cart', product_id=product.id) }}" 
+            method="POST" 
+            class="flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-3 sm:space-y-0">
+        
+        {{ form.hidden_tag() }}
+
+        <div class="flex items-center space-x-2">
+          <label for="quantity" class="text-sm font-medium">Jumlah:</label>
+          <input type="number" id="quantity" name="quantity" value="1" min="1" max="{{ product.stock }}" 
+                 class="w-20 border rounded px-2 py-1 text-center">
+        </div>
+
+        <button type="submit" class="w-full sm:w-auto px-6 py-2 bg-pink-500 text-white font-semibold rounded hover:bg-pink-600">
+          Tambah ke Keranjang
+        </button>
+      </form>
+      {% else %}
+      <a href="{{ url_for('login') }}" class="px-4 py-2 bg-pink-500 text-white rounded hover:bg-pink-600 text-center inline-block">
+        Login untuk Tambah ke Keranjang
+      </a>
+      {% endif %}
+
+      <!-- LINK KEMBALI KE PRODUK -->
+      <div class="mt-4">
+        <a href="{{ url_for('products_list') }}" class="text-sm text-gray-500 hover:underline">&larr; Kembali ke Semua Produk</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
