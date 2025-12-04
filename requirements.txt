@@ -19,6 +19,7 @@ MarkupSafe==3.0.3
 ordered-set==4.1.0
 packaging==25.0
 pycparser==2.23
+PyMySQL==1.1.2
 python-dotenv==1.2.1
 python-http-client==3.3.7
 sendgrid==6.12.5
