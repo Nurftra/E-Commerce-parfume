@@ -46,8 +46,6 @@ limiter = Limiter(
     default_limits=["100 per day", "10 per hour"]
 )
 
-with app.app_context():
-    db.create_all()
 
 # ----------------------- Models -----------------------
 class User(db.Model):
